@@ -67,6 +67,14 @@ class Document(models.Model):
     sys_date_edit = models.DateTimeField(auto_now=True)
     Tasks = models.ManyToManyField(Task, blank=True)
 
+    def counterparts(self):
+
+        return ", ".join([item.name for item in self.counterpart.all()])
+
+    def classifiers(self):
+
+        return ", ".join([item.name for item in self.classifier.all()])
+
     def __str__(self):
         return f'{self.type} № {self.nom} от {self.date}'
 
