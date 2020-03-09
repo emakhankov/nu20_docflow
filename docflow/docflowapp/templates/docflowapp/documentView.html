@@ -1,0 +1,40 @@
+
+{% extends "base.html" %}
+
+{% block title %}
+Документ - {{ document }}
+{% endblock%}
+
+{% block content %}
+<div class="row">
+    <h1>{{ document }}</h1>
+<table class="table table-bordered">
+  <tbody>
+      <tr>
+      <td>Тип</td>
+      <td>{{ document.type }}</td>
+    </tr>
+    <tr>
+      <td>Номер</td>
+      <td>{{ document.num }}</td>
+    </tr>
+    <tr>
+      <td>Дата</td>
+      <td>{{ document.date }}</td>
+    </tr>
+    <tr>
+      <td>Контрагенты</td>
+      <td>{{ document.counterparts}}</td>
+    </tr>
+    <tr>
+      <td>Классификаторы</td>
+      <td>{{ document.classifiers}}</td>
+    </tr>
+    <tr>
+      <td>Описание</td>
+      <td>{{ document.description}}</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+{% endblock %}

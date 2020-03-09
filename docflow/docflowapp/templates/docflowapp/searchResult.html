@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block title %}
+  Делопроизводство - поиск документов
+{% endblock %}
+
+{% block content %}
+
+{% if documents_count != 0 %}
+<h2>По вашему запросу найдено {{ documents_count }} документов.</h2>
+<table class="table table-striped table-bordered table-hover">
+  <thead class="thead-light">
+    <tr>
+      <th scope="col">Тип документа</th>
+      <th scope="col">Номер</th>
+      <th scope="col">Дата</th>
+      <th scope="col">Контрагент(ы)</th>
+      <th scope="col">Описание</th>
+      <th scope="col">Классификатор</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in documents %}
+    <tr>
+      <td>{{ item.type }}</td>
+      <td><a href="{% url 'docflowapp:document_view' pk=item.pk %}">{{ item.nom }}</a></td>
+      <td>{{ item.date }}</td>
+      <td>{{ item.counterparts }}</td>
+      <td>{{ item.description }}</td>
+      <td>{{ item.classisifiers }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<h2>По вашему запросу найдено документов не найдено</h2>
+{% endif %}
+<a class="btn btn-secondary" href="{% url 'docflowapp:search' %}" role="button">Новый поиск</a>
+{% endblock %}

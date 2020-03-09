@@ -45,13 +45,14 @@
     {% for item in documents %}
     <tr>
       <td>{{ item.type }}</td>
-      <td>{{ item.nom }}</td>
+      <td><a href="{% url 'docflowapp:document_view' pk=item.pk %}">{{ item.nom }}</a></td>
       <td>{{ item.date }}</td>
       <td>{{ item.counterparts }}</td>
       <td>{{ item.description }}</td>
-      <td>{{ item.classisifiers }}</td>
+      <td>{{ item.classifiers }}</td>
     </tr>
     {% endfor %}
   </tbody>
 </table>
+<a class="btn btn-success" href="{% url 'docflowapp:document_add' %}" role="button">Зарегистрировать документ</a>
 {% endblock %}
