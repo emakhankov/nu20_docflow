@@ -3,57 +3,62 @@ from django.db import models
 # Create your models here.
 
 
-class Task(models.Model):
+class SysDateAddEdit(models.Model):
+    """
+    Абстрактный класс для системной информации
+    """
+
+    class Meta:
+        abstract = True
+
+    sys_date_add = models.DateTimeField(auto_now_add=True)
+    sys_date_edit = models.DateTimeField(auto_now=True)
+
+
+class Task(SysDateAddEdit):
     """
     Задачи
     """
     name = models.CharField(max_length=255, unique=True)
     description = models.TextField(blank=True)
     date = models.DateField()
-    sys_date_add = models.DateTimeField(auto_now_add=True)
-    sys_date_edit = models.DateTimeField(auto_now=True)
 
 
-class DocumentType(models.Model):
+class DocumentType(SysDateAddEdit):
     """
     Классы документов
     """
-    name = models.CharField(max_length=255, unique = True)
-    sys_date_add = models.DateTimeField(auto_now_add=True)
-    sys_date_edit = models.DateTimeField(auto_now=True)
+    name = models.CharField(max_length=255, unique= True)
 
     def __str__(self):
         return self.name
 
-class Classifier(models.Model):
+
+class Classifier(SysDateAddEdit):
     """
     Классификатор
     Значение классификатора может соответствовать нескольким типам документов
     """
     name = models.CharField(max_length=255, unique = True)
     document_type = models.ManyToManyField(DocumentType)
-    sys_date_add = models.DateTimeField(auto_now_add=True)
-    sys_date_edit = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.name
 
 
-class Counterpart(models.Model):
+class Counterpart(SysDateAddEdit):
     """
     Контрагенты
     """
     name = models.CharField(max_length=255, unique=True)
     full_name = models.CharField(max_length=255, unique=True)
     tax_number = models.CharField(max_length=50, unique=True)
-    sys_date_add = models.DateTimeField(auto_now_add=True)
-    sys_date_edit = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.name
 
 
-class Document(models.Model):
+class Document(SysDateAddEdit):
     """
     Карточки документов
     """
@@ -63,8 +68,6 @@ class Document(models.Model):
     counterpart = models.ManyToManyField(Counterpart, blank=True)
     description = models.TextField(blank=True)
     classifier = models.ManyToManyField(Classifier)
-    sys_date_add = models.DateTimeField(auto_now_add=True)
-    sys_date_edit = models.DateTimeField(auto_now=True)
     Tasks = models.ManyToManyField(Task, blank=True)
 
     def counterparts(self):
@@ -89,14 +92,13 @@ class DocumentConnection(models.Model):
     sys_date_add = models.DateTimeField(auto_now_add=True)
 
 
-class DocumentVersion(models.Model):
+class DocumentVersion(SysDateAddEdit):
     """
     Версии документов
     """
     document = models.ForeignKey(Document, on_delete=models.CASCADE)
     version_date = models.DateField()
-    sys_date_add = models.DateTimeField(auto_now_add=True)
-    sys_date_edit = models.DateTimeField(auto_now=True)
+
 
 
 
