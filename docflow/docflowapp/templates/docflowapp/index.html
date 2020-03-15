@@ -13,6 +13,9 @@
       <th scope="col">Дата</th>
       <th scope="col">Краткое описание</th>
       <th scope="col">Описание</th>
+      <th scope="col">Направлена пользователю</th>
+      <th scope="col">Зарегистрирована</th>
+      <th scope="col">Пользователем</th>
     </tr>
   </thead>
   <tbody>
@@ -21,6 +24,9 @@
       <td>{{ item.date }}</td>
       <td>{{ item.name }}</td>
       <td>{{ item.discription }}</td>
+      <td>{{ item.user_to}}</td>
+      <td>{{ item.sys_date_add }}</td>
+      <td>{{ item.sys_user_add }}</td>
     </tr>
    {% endfor %}
   </tbody>
