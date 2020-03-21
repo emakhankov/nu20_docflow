@@ -97,6 +97,6 @@ class ViewsTest(TestCase):
         doc_after = Document.objects.count()
 
         self.assertEqual(doc_before+1, doc_after)
-        
+
 
 
