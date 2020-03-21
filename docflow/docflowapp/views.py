@@ -1,8 +1,9 @@
-from django.shortcuts import render, get_object_or_404, HttpResponseRedirect
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.shortcuts import render, get_object_or_404, HttpResponseRedirect, redirect
 from django.urls import reverse, reverse_lazy
 from django.shortcuts import render
 from .models import Task, Document
-from .forms import SearchForm, DocumentAddEditForm
+from .forms import SearchForm, DocumentAddEditForm, TaskAddEditForm
 from django.views.generic import View, TemplateView, FormView, CreateView, DetailView
 from django.views.generic.base import ContextMixin
 
@@ -10,7 +11,7 @@ from django.db.models import Q
 # Create your views here.
 
 
-class IndexView(TemplateView):
+class IndexView(LoginRequiredMixin, TemplateView):
     """
     Здесь стартовая страница, поэтому не будем отображать ее как
     """
@@ -20,17 +21,20 @@ class IndexView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         documents = Document.objects.all().order_by('-date')[:5]
-        tasks = Task.objects.all().order_by('-date')[:5]
+        tasks = Task.objects.filter(user_to=self.request.user).order_by('-date')[:5]
         context['nbar'] = 'index'
         context['documents'] = documents
         context['tasks'] = tasks
         return context
 
 
-class SearchView(View):
+class SearchView(LoginRequiredMixin, UserPassesTestMixin, View):
     """
     Здесь будут по разному отрабатываться get и post запрос
     """
+
+    def test_func(self):
+        return self.request.user.can_find_documents
 
     def get(self, request, *args, **kwargs):
         search_form = SearchForm()
@@ -68,14 +72,14 @@ class SearchView(View):
             return render(request, 'docflowapp/search.html', context={'nbar': 'search', 'search_form': search_form})
 
 
-class DocumentView(DetailView):
+class DocumentView(LoginRequiredMixin, DetailView):
 
     model = Document
     template_name = 'docflowapp/documentView.html'
     context_object_name = 'document'
 
 
-class DocumentAdd(CreateView):
+class DocumentAdd(LoginRequiredMixin, UserPassesTestMixin, CreateView):
 
 
     #fields = '__all__'
@@ -86,7 +90,38 @@ class DocumentAdd(CreateView):
     success_url = reverse_lazy('docflowapp:index')
     template_name = 'docflowapp/documentAdd.html'
 
+    def test_func(self):
+        return self.request.user.can_add_documents
 
+    #def handle_no_permission(self):
+     #   return redirect('users:create-profile')
+
+    def form_valid(self, form):
+
+        # self.request.user - текущий пользователь
+        form.instance.sys_user_add = self.request.user
+        return super().form_valid(form)
+
+
+class TaskAdd(LoginRequiredMixin, CreateView):
+
+    form_class = TaskAddEditForm
+    success_url = reverse_lazy('docflowapp:index')
+    template_name = 'docflowapp/taskAdd.html'
+
+    def dispatch(self, request, *args, **kwargs):
+
+        self.document = get_object_or_404(Document, pk=kwargs['pk'])
+        return super().dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form):
+
+        # self.request.user - текущий пользователь
+        form.instance.sys_user_add = self.request.user
+        form.save()
+        form.instance.document_set.add(self.document)
+        form.save()
+        return super().form_valid(form)
 
 #def index_view(request):
 #

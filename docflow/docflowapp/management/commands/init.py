@@ -27,6 +27,7 @@ class Command(BaseCommand):
             DocumentType.objects.create(name='Внутренний')
 
             DocumentType.objects.create(name='Счет')
+
         else:
             print('Типы документов уже заполнены')
 

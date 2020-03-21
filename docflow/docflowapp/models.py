@@ -1,5 +1,5 @@
 from django.db import models
-
+from usersapp.models import DocFlowUser
 # Create your models here.
 
 
@@ -13,22 +13,23 @@ class SysDateAddEdit(models.Model):
 
     sys_date_add = models.DateTimeField(auto_now_add=True)
     sys_date_edit = models.DateTimeField(auto_now=True)
-
+    sys_user_add = models.ForeignKey(DocFlowUser, on_delete=models.DO_NOTHING, null=True)
 
 class Task(SysDateAddEdit):
     """
     Задачи
     """
-    name = models.CharField(max_length=255, unique=True)
+    name = models.CharField(max_length=255, unique=False)
     description = models.TextField(blank=True)
     date = models.DateField()
+    user_to = models.ForeignKey(DocFlowUser, on_delete=models.DO_NOTHING, related_name='user_to')
 
 
 class DocumentType(SysDateAddEdit):
     """
     Классы документов
     """
-    name = models.CharField(max_length=255, unique= True)
+    name = models.CharField(max_length=255, unique=True)
 
     def __str__(self):
         return self.name
@@ -39,7 +40,7 @@ class Classifier(SysDateAddEdit):
     Классификатор
     Значение классификатора может соответствовать нескольким типам документов
     """
-    name = models.CharField(max_length=255, unique = True)
+    name = models.CharField(max_length=255, unique=True)
     document_type = models.ManyToManyField(DocumentType)
 
     def __str__(self):
@@ -65,7 +66,7 @@ class Document(SysDateAddEdit):
     type = models.ForeignKey(DocumentType, on_delete=models.CASCADE)
     nom = models.CharField(max_length=50)
     date = models.DateField()
-    counterpart = models.ManyToManyField(Counterpart, blank=True)
+    counterpart = models.ManyToManyField(Counterpart, blank=True, null=True)
     description = models.TextField(blank=True)
     classifier = models.ManyToManyField(Classifier)
     Tasks = models.ManyToManyField(Task, blank=True)

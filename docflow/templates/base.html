@@ -25,17 +25,47 @@
       <li class="nav-item {% if nbar == 'index' %}active{% endif %}">
         <a class="nav-link" href="{% url 'docflowapp:index' %}">Главная<span class="sr-only">(current)</span></a>
       </li>
+
+      {% if user.can_add_documents %}
       <li class="nav-item {% if nbar == 'search' %}active{% endif %}">
         <a class="nav-link" href="{% url 'docflowapp:search' %}">Поиск документов</a>
       </li>
+      {% endif %}
+      {% if user.is_superuser %}
+       <li class="nav-item {% if nbar == 'register' %}active{% endif %}">
+        <a class="nav-link" href="{% url 'usersapp:register' %}">Создать пользователя</a>
+      </li>
+       <li class="nav-item">
+        <a class="nav-link" href="{% url 'admin:index' %}">Админка</a>
+      </li>
+      {% endif%}
     </ul>
+    {% if user.can_add_documents %}
       <a class="btn btn-success" style="margin-right:50px" href="{% url 'docflowapp:document_add' %}" role="button">Зарегистрировать документ</a>
+    {% endif %}
+
+    {% if user.can_search_documents %}
     {% if nbar != 'search' %}
     <form class="form-inline my-2 my-lg-0" method="post" action="{% url 'docflowapp:search' %}">{% csrf_token %}
       <input class="form-control mr-sm-2" name="all" type="search" placeholder="Документ" aria-label="Search">
       <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Искать</button>
     </form>
     {% endif %}
+    {% endif %}
+      <ul class="navbar-nav" style="margin-left:50px">
+      {% if user.is_authenticated %}
+          <li class="nav-item"><span class="nav-link">{{user.username}}</span>
+
+       </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'usersapp:logout' %}">Выйти</a>
+      </li>
+      {% else %}
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'usersapp:login' %}">Вход</a>
+      </li>
+      {% endif %}
+      </ul>
    </div>
 </nav>
 <div class="container">
