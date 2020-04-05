@@ -87,7 +87,8 @@ class DocumentAdd(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     #fields = ('type', 'nom', 'date', 'counterpart', 'description', 'classifier')
 
     form_class = DocumentAddEditForm
-    success_url = reverse_lazy('docflowapp:index')
+    # Мы пойдем на URL с параметром
+    #success_url = reverse_lazy('docflowapp:index')
     template_name = 'docflowapp/documentAdd.html'
 
     def test_func(self):
@@ -101,6 +102,10 @@ class DocumentAdd(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         # self.request.user - текущий пользователь
         form.instance.sys_user_add = self.request.user
         return super().form_valid(form)
+
+    def get_success_url(self):
+        print('Добавилось', self.object.id)
+        return reverse('docflowapp:document_view', args=(self.object.id,))
 
 
 class TaskAdd(LoginRequiredMixin, CreateView):
