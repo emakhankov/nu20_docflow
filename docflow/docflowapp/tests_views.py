@@ -98,5 +98,22 @@ class ViewsTest(TestCase):
 
         self.assertEqual(doc_before+1, doc_after)
 
+    def test_document_pagination(self):
 
+        self.documents = []
+        for i in range(0,20):
+            self.documents.append(mixer.blend(Document))
 
+        self.client.login(username='test_user1', password='12345')
+        response = self.client.get('/p_documents?page=0')
+        self.assertEqual(response.status_code, 404)
+        response = self.client.get('/p_documents?page=1')
+        self.assertEqual(response.status_code, 200)
+        response = self.client.get('/p_documents?page=2')
+        self.assertEqual(response.status_code, 200)
+        response = self.client.get('/p_documents?page=3')
+        self.assertEqual(response.status_code, 200)
+        response = self.client.get('/p_documents?page=4')
+        self.assertEqual(response.status_code, 200)
+        response = self.client.get('/p_documents?page=5')
+        self.assertEqual(response.status_code, 404)

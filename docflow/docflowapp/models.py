@@ -3,6 +3,8 @@ from usersapp.models import DocFlowUser
 # Create your models here.
 
 
+
+
 class SysDateAddEdit(models.Model):
     """
     Абстрактный класс для системной информации
@@ -15,10 +17,12 @@ class SysDateAddEdit(models.Model):
     sys_date_edit = models.DateTimeField(auto_now=True)
     sys_user_add = models.ForeignKey(DocFlowUser, on_delete=models.DO_NOTHING, null=True)
 
+
 class Task(SysDateAddEdit):
     """
     Задачи
     """
+
     name = models.CharField(max_length=255, unique=False)
     description = models.TextField(blank=True)
     date = models.DateField()
