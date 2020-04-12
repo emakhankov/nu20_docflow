@@ -28,6 +28,8 @@ class Task(SysDateAddEdit):
     date = models.DateField()
     user_to = models.ForeignKey(DocFlowUser, on_delete=models.DO_NOTHING, related_name='user_to')
 
+    def documents_for_template(self):
+        return self.document_set.select_related('type', 'sys_user_add').all().prefetch_related('counterpart', 'classifier')
 
 class DocumentType(SysDateAddEdit):
     """
@@ -82,6 +84,9 @@ class Document(SysDateAddEdit):
     def classifiers(self):
 
         return ", ".join([item.name for item in self.classifier.all()])
+
+    def tasks_for_template(self):
+        return self.Tasks.select_related("sys_user_add", "user_to")
 
     def __str__(self):
         return f'{self.type} № {self.nom} от {self.date}'

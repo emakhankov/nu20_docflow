@@ -34,11 +34,11 @@ class IndexView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        documents = Document.objects.all().order_by('-date')[:5]
+        documents = Document.objects.select_related('type', 'sys_user_add').all().prefetch_related('counterpart', 'classifier').order_by('-date')[:5]
         documents_page_obj = FakePaginator((Document.objects.count() - 1) // 5 + 1)
         #print(documents_page_obj.number, documents_page_obj.paginator.num_pages)
         #tasks = Task.objects.objects_user_to.order_by('-date')[:5]
-        tasks = Task.objects.filter(user_to=self.request.user).order_by('-date')[:5]
+        tasks = Task.objects.filter(user_to=self.request.user).select_related('sys_user_add', 'user_to').order_by('-date')[:5]
         tasks_page_obj = FakePaginator((Task.objects.filter(user_to=self.request.user).count() - 1) // 5 + 1)
         context['nbar'] = 'index'
         context['documents'] = documents
@@ -58,7 +58,8 @@ class IndexViewDocuments(ListView):
     context_object_name = 'documents'
 
     def get_queryset(self):
-        return Document.objects.all().order_by('-date')
+        return Document.objects.select_related('type', 'sys_user_add').all()\
+            .prefetch_related('counterpart', 'classifier').order_by('-date')
 
 
 class IndexViewTasks(ListView):
@@ -70,7 +71,7 @@ class IndexViewTasks(ListView):
     context_object_name = 'tasks'
 
     def get_queryset(self):
-        return Task.objects.filter(user_to=self.request.user).order_by('-date')
+        return Task.objects.filter(user_to=self.request.user).select_related('sys_user_add', 'user_to').order_by('-date')
 
 
 class SearchView(LoginRequiredMixin, UserPassesTestMixin, View):
@@ -109,7 +110,7 @@ class SearchView(LoginRequiredMixin, UserPassesTestMixin, View):
                 q1 = q1.filter(description__icontains=description)
             if all is not None:
                 q1 = q1.filter(Q(nom__icontains=all) | Q(description__icontains=all))
-            documents = q1.all()
+            documents = q1.select_related('type', 'sys_user_add').all().prefetch_related('counterpart', 'classifier')
             documents_count = documents.count()
             return render(request, 'docflowapp/searchResult.html',
                           context={'nbar': 'search', 'documents': documents, 'documents_count': documents_count})
@@ -119,7 +120,8 @@ class SearchView(LoginRequiredMixin, UserPassesTestMixin, View):
 
 
 class DocumentView(LoginRequiredMixin, DetailView):
-    model = Document
+    #model = Document
+    queryset = Document.objects.select_related('type', 'sys_user_add')
     template_name = 'docflowapp/documentView.html'
     context_object_name = 'document'
 
@@ -184,3 +186,10 @@ class TaskAdd(LoginRequiredMixin, CreateView):
 #    else:
 #
 #        return render(request, 'docflowapp/search.html', context={'nbar': 'search', 'search_form': search_form })
+
+
+class TaskView(LoginRequiredMixin, DetailView):
+    #model = Document
+    queryset = Task.objects.select_related('sys_user_add', 'user_to')
+    template_name = 'docflowapp/taskView.html'
+    context_object_name = 'task'
