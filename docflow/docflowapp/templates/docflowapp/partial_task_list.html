@@ -12,7 +12,7 @@
   <tbody>
   {% for item in tasks %}
     <tr>
-      <td>{{ item.date|date:"d.m.Y"}}</td>
+      <td><a href="{% url 'docflowapp:task_view' pk=item.pk %}">{{ item.date|date:"d.m.Y"}}</a></td>
       <td>{{ item.name }}</td>
       <td>{{ item.description }}</td>
       <td>{{ item.user_to}}</td>

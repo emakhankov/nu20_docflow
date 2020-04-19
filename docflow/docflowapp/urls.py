@@ -12,4 +12,5 @@ urlpatterns = [
     path('document/<int:pk>', views.DocumentView.as_view(), name='document_view'),
     path('document/add', views.DocumentAdd.as_view(), name='document_add'),
     path('document/<int:pk>/addTask', views.TaskAdd.as_view(), name='task_add'),
+    path('task/<int:pk>', views.TaskView.as_view(), name='task_view'),
 ]

@@ -1,0 +1,40 @@
+
+{% extends "base.html" %}
+
+{% block title %}
+Задание- {{ task }}
+{% endblock%}
+
+{% block content %}
+<h2>Задание</h2>
+<table class="table table-bordered">
+  <tbody>
+      <tr>
+      <td>Дата</td>
+      <td>{{ task.date|date:"d.m.Y" }}</td>
+    </tr>
+    <tr>
+      <td>Краткое описание</td>
+      <td>{{ task.name }}</td>
+    </tr>
+    <tr>
+      <td>Описание</td>
+      <td>{{ task.description }}</td>
+    </tr>
+    <tr>
+      <td>Направлена пользователю</td>
+      <td>{{ task.user_to }}</td>
+    </tr>
+    <tr>
+      <td>Зарегистрирована</td>
+      <td>{{ task.sys_date_add|date:"d.m.Y H:i" }}</td>
+    </tr>
+    <tr>
+      <td>Пользователем</td>
+      <td>{{ task.sys_user_add }}</td>
+    </tr>
+  </tbody>
+</table>
+<h3>Документы в задании</h3>
+{% include "docflowapp/partial_document_table.html" with documents=task.documents_for_template.all %}
+{% endblock%}
