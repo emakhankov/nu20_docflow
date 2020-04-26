@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}
 Новый документ
@@ -19,11 +20,27 @@
             {% for error in field.errors %}
             {{error}}
             {% endfor %}
-            <p>{{field}}</p>
+            <div class="input-group">{{field}}</div>
             </div>
             {% endfor %}
             <button type="submit" class="btn btn-primary">Сохранить</button>
         </form>
+
     </div>
 </div>
+
+  <script>
+  $(function() {
+    $("#id_date").datepicker({
+      dateFormat: "dd.mm.yy",
+      showOn: "button",
+      buttonImage: "{% static 'images/calendar.gif' %}",
+      buttonImageOnly: true,
+      buttonText: "Выбрать дату",
+      monthNames : ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'],
+	  dayNamesMin : ['Вс','Пн','Вт','Ср','Чт','Пт','Сб'],
+    });
+    $(".ui-datepicker-trigger").css("width","30px");
+  } );
+  </script>
 {% endblock %}

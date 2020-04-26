@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% load crispy_forms_tags %}
 
@@ -14,4 +15,20 @@
 {{ search_form|crispy }}
 <button type="submit" class="btn btn-primary" id="sendMessageButton">Искать</button>
 </form>
+  <script>
+  $(function() {
+    $("#id_date_from, #id_date_to").datepicker({
+      dateFormat: "dd.mm.yy",
+      showOn: "button",
+      buttonImage: "{% static 'images/calendar.gif' %}",
+      buttonImageOnly: true,
+      buttonText: "Выбрать дату",
+      monthNames : ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'],
+	  dayNamesMin : ['Вс','Пн','Вт','Ср','Чт','Пт','Сб'],
+    });
+    $(".ui-datepicker-trigger").css("width","30px");
+    $(".ui-datepicker-trigger").parent().addClass("input-group");
+  } );
+  </script>
+
 {% endblock %}
