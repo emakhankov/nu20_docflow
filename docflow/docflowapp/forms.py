@@ -2,7 +2,7 @@ from django import forms
 
 from usersapp.models import DocFlowUser
 from .models import DocumentType, Document, Counterpart, Classifier, Task
-
+from django.conf import settings
 
 class SearchForm(forms.Form):
     # можно так
@@ -11,8 +11,8 @@ class SearchForm(forms.Form):
 
     type = forms.ModelChoiceField(label='Тип документа', required=False, queryset=DocumentType.objects.all())
     nom = forms.CharField(label='Номер', required=False)
-    date_from = forms.DateField(label='Дата документа с', required=False)
-    date_to = forms.DateField(label='Дата документа по', required=False)
+    date_from = forms.DateField(label='Дата документа с', required=False, input_formats=['%d.%m.%Y', ],)
+    date_to = forms.DateField(label='Дата документа по', required=False, input_formats=['%d.%m.%Y', ],)
     description = forms.CharField(label='Описание', required=False)
 
     all = forms.CharField(label='Описание', required=False, widget=forms.HiddenInput())
@@ -25,7 +25,7 @@ class DocumentAddEditForm(forms.ModelForm):
     nom = forms.CharField(label='Номер документа', required=True,
                           widget=forms.TextInput(attrs={'class': 'form-control'}))
 
-    date = forms.CharField(label='Дата документа', required=True,
+    date = forms.DateField(label='Дата документа', required=True, input_formats=['%d.%m.%Y', ],
                            widget=forms.DateInput(attrs={'class': 'form-control'}))
 
     counterpart = forms.ModelMultipleChoiceField(label='Контрагенты', required=False,
@@ -51,8 +51,10 @@ class TaskAddEditForm(forms.ModelForm):
                           widget=forms.TextInput(attrs={'class': 'form-control'}))
     description = forms.CharField(label='Описание', required=False,
                                   widget=forms.TextInput(attrs={'class': 'form-control'}))
-    date = forms.CharField(label='Дата задачи', required=True,
-                           widget=forms.DateInput(attrs={'class': 'form-control'}))
+    date = forms.DateField(label='Дата задачи', required=True, input_formats=['%d.%m.%Y', ],
+                           widget=forms.DateInput(attrs={'class': 'form-control datepicker'}))
+
+    #date = forms.DateField(widget=forms.SelectDateWidget(years=last_years()))
 
     user_to = forms.ModelChoiceField(label='Направить', required=True, queryset=DocFlowUser.objects.all(),
                                   widget=forms.Select(attrs={'class': 'form-control'}))

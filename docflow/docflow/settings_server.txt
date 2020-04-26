@@ -25,7 +25,7 @@ SECRET_KEY = 'hf+#nac7$qluoe^0#4)t_39^qsnmonsgoqr2qk)wz3m8536cgn'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -58,9 +58,9 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'docflow.urls'
 
-TEMPLATES = [
+EMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+     	'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -70,7 +70,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
-        },
+	},
     },
 ]
 
@@ -91,18 +91,18 @@ DATABASES = {
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
 
-AUTH_PASSWORD_VALIDATORS = [
+UTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+     	'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+     	'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+     	'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
 
@@ -120,7 +120,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-#DATE_INPUT_FORMATS = ('%d.%m.%Y')
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
@@ -132,13 +131,15 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 # Переназначение модели пользователя
 AUTH_USER_MODEL = 'usersapp.DocFlowUser'
 
+
 # Переходы
 # Куда идти после логина
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = 'docflow/'
 # Куда идти после выхода
-LOGOUT_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = 'http://194.67.108.5/docflow'
 # Куда идти на логин
-LOGIN_URL = '/users/login/'
+LOGIN_URL = 'docflow/users/login/'
+LOGOUT_URL ='docflow/users/logout/'
 
 INTERNAL_IPS = [
     '127.0.0.1',
