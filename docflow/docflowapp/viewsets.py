@@ -21,7 +21,7 @@ class UserTaskViewSet(viewsets.ModelViewSet):
 
 
 class DocumentViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Document.objects.all()
+    queryset = Document.objects.select_related('type', 'sys_user_add').all().prefetch_related('counterpart', 'classifier', 'Tasks')
     serializer_class = DocumentSerializer
 
 

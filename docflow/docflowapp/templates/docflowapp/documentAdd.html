@@ -12,7 +12,7 @@
 <div class="row">
     <br>
     <div class="col-lg-8 col-md-10 mx-auto">
-        <form method="post" enctype="multipart/form-data">
+        <form id="form_document" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             {% for field in form %}
             <div class="form-group">
@@ -30,7 +30,12 @@
 </div>
 
   <script>
+
+  var counterpart_count = 1;
+
   $(function() {
+
+
     $("#id_date").datepicker({
       dateFormat: "dd.mm.yy",
       showOn: "button",
@@ -41,6 +46,38 @@
 	  dayNamesMin : ['Вс','Пн','Вт','Ср','Чт','Пт','Сб'],
     });
     $(".ui-datepicker-trigger").css("width","30px");
+
+    $("#id_counterpart").after("<select class='form-control' id='id_counterpart_1'></select>")
+    $("#id_counterpart").addClass("invisible")
+    $("#id_counterpart").hide()
+    var $options = $("#id_counterpart > option").clone();
+    $("#id_counterpart_1").append($options);
+
+    $("#id_counterpart_1").parent().after("<button style='margin-top: 10px' type='button' class='btn btn-outline-success badge-pill' onClick='addCounterpart()'>Добавить контрагента</button>")
+
+
+    $("#form_document").submit(function() {
+        var var_selected = [];
+        for(i=1; i<=counterpart_count; i++){
+            var_selected.push($("#id_counterpart_" + i).children("option:selected").val());
+        };
+        $("#id_counterpart").val(var_selected);
+        return true;
+    });
+
   } );
+
+  function addCounterpart() {
+   var last_counterpart = counterpart_count;
+   counterpart_count++;
+
+   $("#id_counterpart_" + last_counterpart).parent().after("<div style='margin-top: 5px' class='input-group'><select class='form-control' id='id_counterpart_" + counterpart_count + "'></select></div>");
+    var $options = $("#id_counterpart > option").clone();
+    $("#id_counterpart_" + counterpart_count).append($options);
+  }
+
+
+
+
   </script>
 {% endblock %}

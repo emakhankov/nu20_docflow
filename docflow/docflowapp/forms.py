@@ -19,6 +19,7 @@ class SearchForm(forms.Form):
 
 
 class DocumentAddEditForm(forms.ModelForm):
+
     type = forms.ModelChoiceField(label='Тип документа', required=True, queryset=DocumentType.objects.all(),
                                   widget=forms.Select(attrs={'class': 'form-control'}))
 
