@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'docflowapp',
     'usersapp',
     'debug_toolbar',
+    'rest_framework',
+    'django_cleanup.apps.CleanupConfig',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
