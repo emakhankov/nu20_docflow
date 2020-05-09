@@ -89,7 +89,7 @@ class ViewsTest(TestCase):
         doc_before = Document.objects.count()
         response = self.client.post('/document/add',
                                     {'type': self.document_type1.pk,
-                                     'nom': '12345', 'date': '2020-01-01',
+                                     'nom': '12345', 'date': '01.01.2020',
                                      'counterpart': [self.counterpart1.pk],
                                      'classifier': [self.classifier1.pk],
                                      'description': self.fake.text})

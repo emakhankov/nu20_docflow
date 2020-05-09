@@ -4,7 +4,8 @@ from django.contrib.auth.views import LoginView
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from usersapp.forms import DocFlowUserCreationForm
-
+from django.http import JsonResponse
+from rest_framework.authtoken.models import Token
 
 class UserLoginView(LoginView):
 
@@ -24,4 +25,26 @@ def register(request):
         f = DocFlowUserCreationForm()
 
     return render(request, 'usersapp/register.html', {'form': f, 'nbar': 'register'})
+
+
+def user(request):
+
+    return render(request, 'usersapp/user.html', {user: request.user})
+
+
+def getnewTokenUser(request):
+
+    user = request.user
+    try:
+        token = user.auth_token
+        token.delete()
+        token = Token.objects.create(user=user)
+    except:
+        token = Token.objects.create(user=user)
+
+    data = {'token': token.key}
+
+    return JsonResponse(data)
+
+
 
