@@ -32,16 +32,16 @@
     <li class="page-item"><a class="page-link" href="javascript:load_p_tasks({{ page_obj.number|add:"-2" }})">{{ page_obj.number|add:"-2" }}</a></li>
     {% endif %}
     {% if page_obj.number > 1 %}
-    <li class="page-item"><a class="page-link" href="javascript:load_p_tasks{{ page_obj.number|add:"-1" }})">{{ page_obj.number|add:"-1" }}</a></li>
+    <li class="page-item"><a class="page-link" href="javascript:load_p_tasks({{ page_obj.number|add:"-1" }})">{{ page_obj.number|add:"-1" }}</a></li>
     {% endif %}
 
     <li class="page-item active"><a class="page-link" href="#">{{ page_obj.number }}</a></li>
 
     {% if page_obj.number < page_obj.paginator.num_pages  %}
-    <li class="page-item"><a class="page-link" href="javascript:load_p_tasks({{ page_obj.number|add:"1" }})">{{ page_obj.number|add:"1"  }}</a></li>
+    <li class="page-item"><a class="page-link" href="javascript:load_p_tasks({{ page_obj.number|add:"1" }})">{{ page_obj.number|add:"1" }}</a></li>
     {% endif %}
     {% if page_obj.number < page_obj.paginator.num_pages|add:"-1" %}
-    <li class="page-item"><a class="page-link" href="javascript:load_p_tasks({ page_obj.number|add:"2" }})">{{ page_obj.number|add:"2" }}</a></li>
+    <li class="page-item"><a class="page-link" href="javascript:load_p_tasks({{ page_obj.number|add:"2" }})">{{ page_obj.number|add:"2" }}</a></li>
     {% endif %}
     {% if page_obj.number < page_obj.paginator.num_pages %}
     <li class="page-item"><a class="page-link" href="javascript:load_p_tasks({{ page_obj.paginator.num_pages }})">Конец</a></li>
@@ -51,7 +51,7 @@
 </nav>
 
 <script>
-function load_p_documents(page) {
+function load_p_tasks(page) {
   url = "{% url 'docflowapp:p_index_tasks'%}?page=" + page;
   $('#p_tasks').load(url)
   }
