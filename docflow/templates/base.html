@@ -33,11 +33,18 @@
         <a class="nav-link" href="{% url 'docflowapp:index' %}">Главная<span class="sr-only">(current)</span></a>
       </li>
 
-      {% if user.can_add_documents %}
+      {% if user.can_find_documents %}
       <li class="nav-item {% if nbar == 'search' %}active{% endif %}">
         <a class="nav-link" href="{% url 'docflowapp:search' %}">Поиск документов</a>
       </li>
       {% endif %}
+
+      {% if user.can_add_documents %}
+      <li class="nav-item {% if nbar == 'counterpart' %}active{% endif %}">
+        <a class="nav-link" href="{% url 'docflowapp:counterpart_list' %}">Контрагенты</a>
+      </li>
+      {% endif %}
+
       {% if user.is_superuser %}
        <li class="nav-item {% if nbar == 'register' %}active{% endif %}">
         <a class="nav-link" href="{% url 'usersapp:register' %}">Создать пользователя</a>
@@ -51,7 +58,8 @@
       <a class="btn btn-success" style="margin-right:50px" href="{% url 'docflowapp:document_add' %}" role="button">Зарегистрировать документ</a>
     {% endif %}
 
-    {% if user.can_search_documents %}
+
+    {% if user.can_find_documents %}
     {% if nbar != 'search' %}
     <form class="form-inline my-2 my-lg-0" method="post" action="{% url 'docflowapp:search' %}">{% csrf_token %}
       <input class="form-control mr-sm-2" name="all" type="search" placeholder="Документ" aria-label="Search">

@@ -25,6 +25,8 @@ urlpatterns = [
     path('document/add', views.DocumentAdd.as_view(), name='document_add'),
     path('document/<int:pk>/addTask', views.TaskAdd.as_view(), name='task_add'),
     path('task/<int:pk>', views.TaskView.as_view(), name='task_view'),
+    path('counterpart/list', views.CounterpartView.as_view(), name='counterpart_list'),
+    path('counterpart/add', views.CounterpartAdd.as_view(), name='counterpart_add'),
     path('api/', include(router.urls)),
     path('api/v0/', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),

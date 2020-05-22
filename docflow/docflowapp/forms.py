@@ -65,3 +65,17 @@ class TaskAddEditForm(forms.ModelForm):
         model = Task
         fields = ('name', 'description', 'date', 'user_to')
 
+
+class CounterpartAddEditForm(forms.ModelForm):
+
+    name = forms.CharField(label='Наименование', required=True,
+                          widget=forms.TextInput(attrs={'class': 'form-control'}))
+    full_name = forms.CharField(label='Полное наименование', required=False,
+                                  widget=forms.TextInput(attrs={'class': 'form-control'}))
+    tax_number = forms.CharField(label='ИНН', required=False,
+                                  widget=forms.TextInput(attrs={'class': 'form-control'}))
+
+    class Meta:
+
+        model = Counterpart
+        fields = ('name', 'full_name', 'tax_number')
