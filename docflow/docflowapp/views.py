@@ -2,8 +2,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import render, get_object_or_404, HttpResponseRedirect, redirect
 from django.urls import reverse, reverse_lazy
 from django.shortcuts import render
-from .models import Task, Document
-from .forms import SearchForm, DocumentAddEditForm, TaskAddEditForm
+from .models import Task, Document, Counterpart
+from .forms import SearchForm, DocumentAddEditForm, TaskAddEditForm, CounterpartAddEditForm
 from django.views.generic import View, TemplateView, FormView, CreateView, DetailView, ListView
 from django.views.generic.base import ContextMixin
 
@@ -195,3 +195,29 @@ class TaskView(LoginRequiredMixin, DetailView):
     queryset = Task.objects.select_related('sys_user_add', 'user_to')
     template_name = 'docflowapp/taskView.html'
     context_object_name = 'task'
+
+
+class CounterpartView(LoginRequiredMixin, ListView):
+
+    queryset = Counterpart.objects.select_related('sys_user_add')
+    template_name = 'docflowapp/counterpart.html'
+    context_object_name = 'counterparts'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['nbar'] = 'counterpart'
+        return context
+
+
+class CounterpartAdd(LoginRequiredMixin, CreateView):
+    form_class = CounterpartAddEditForm
+    success_url = reverse_lazy('docflowapp:counterpart_list')
+    template_name = 'docflowapp/counterpartAdd.html'
+
+    def form_valid(self, form):
+        form.instance.sys_user_add = self.request.user
+        form.save()
+        return super().form_valid(form)
+
+
+

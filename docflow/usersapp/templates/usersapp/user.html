@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block title %}
+    Страница пользователя
+{% endblock %}
+
+{% block content %}
+
+<div class="card text-center">
+  <div class="card-header">
+    Информация о правах пользователя системы
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">Пользователь</h5>
+    <p class="card-text">{{ user.username }}</p>
+    <hr>
+    <p class="сard-text">Может создавать документы
+      {% if user.can_add_documents %}
+        <span class="badge badge-success">Да</span>
+      {% else %}
+        <span class="badge badge-secondary">Нет</span>
+      {% endif %}
+      </p>
+    <p class="сard-text">Может производить поиск
+      {% if user.can_find_documents %}
+        <span class="badge badge-success">Да</span>
+      {% else %}
+        <span class="badge badge-secondary">Нет</span>
+      {% endif %}
+      </p>
+    <p class="сard-text">Наличие токена
+      {% if user.auth_token %}
+        <span class="badge badge-success" id="token_text">Да</span>
+      {% else %}
+        <span class="badge badge-secondary" id="token_text">Нет</span>
+      {% endif %}
+      </p>
+    <hr>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#staticBackdrop" id="token_button">
+      {% if user.auth_token %}
+        показать/обновить токен
+      {% else %}
+        создать токен
+      {% endif %}
+    </button>
+  </div>
+  <div class="card-footer text-muted">
+    {{ user.username }}
+  </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Токен пользователя: <span class="badge badge-pill badge-success" >{{ user.username }}<span></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Токен: <span id="token" class="badge badge-pill badge-info">{{ user.auth_token.key }}</span>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+        <button type="button" class="btn btn-primary" onClick="createToken()">Сгенерировать новый</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  function createToken()
+  {
+  console.log('function');
+    $.ajax({
+                url: "{% url 'usersapp:token'%}",
+                success: function (data) {
+                                            $('#token').html(data.token);
+                                            $('#token_button').html('показать/обновить токен');
+                                            $('#token_text').html('Да');
+                                            $('#token_text').removeClass('badge-secondary');
+                                            $('#token_text').addClass('badge-success');
+                                         },
+            });
+  }
+</script>
+{% endblock %}
