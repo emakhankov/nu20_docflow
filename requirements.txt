@@ -4,7 +4,7 @@ django-cleanup==4.0.0
 django-crispy-forms==1.8.1
 django-debug-toolbar==2.2
 django-filter==2.2.0
-djangorestframework==3.11.0
+djangorestframework==3.11.2
 Faker==4.0.2
 Markdown==3.2.1
 mixer==6.1.3
